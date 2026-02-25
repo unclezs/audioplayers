@@ -415,6 +415,21 @@ class AudioPlayer {
     );
   }
 
+  /// Sets the URL to a file in the users device without waiting for prepared event.
+  ///
+  /// This is useful for local files on macOS where the prepared event may be delayed
+  /// when the app is in the background.
+  Future<void> setSourceDeviceFileImmediate(String path, {String? mimeType}) async {
+    await creatingCompleter.future;
+    _source = DeviceFileSource(path, mimeType: mimeType);
+    await _platform.setSourceUrl(
+      playerId,
+      path,
+      isLocal: true,
+      mimeType: mimeType,
+    );
+  }
+
   /// Sets the URL to an asset in your Flutter application.
   /// The global instance of AudioCache will be used by default.
   ///
